@@ -49,6 +49,20 @@ class CircularLinkedList {
         return (head == null);
     }
     
+    public int length() {
+        if(isEmpty()) {
+            return 0;
+        }else {
+            int count = 1;
+            Node temp = head;
+            while(temp.getNext() != head){
+                temp = temp.getNext();
+                count++;
+            }
+            return count;
+        }
+    }
+    
 
     public void insert(double data, String name) {
         Node newNode = new Node(data, name);
@@ -64,6 +78,7 @@ class CircularLinkedList {
             newNode.setNext(head);
         }
     }
+    
 
     public void roundRobin(double timeQuantum) {
         if (head == null) {
@@ -72,22 +87,25 @@ class CircularLinkedList {
         }
 
         Node current = head;
+        int count = length();
         do {
             if (current.getData() > timeQuantum) {
                 current.setData(current.getData() - timeQuantum);
                 System.out.printf("Executing process %s with remaining time: %.3f\n", current.getName(), current.getData());
                 current = current.getNext(); // Move to the next process
+                count--;
             } else {
                 System.out.println("Executing process "+current.getName()+" with remaining time: 0");
                 Node nextNode = current.getNext();
                 remove(current); // Remove the process that has finished
+                count--;
                 if(head != null) {      //check condition !!!Warning!!!
                    current = nextNode; // Move to the next process
                 } else {
                     break;
                 }
             }
-        } while (current != head || isEmpty() == true);
+        } while (count > 0);     //current != head
     }
 
     public void remove(Node nodeToRemove) {
